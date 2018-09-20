@@ -240,13 +240,18 @@ class CurlTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testGetUrlToCall_badUrlSet_Exception()
     {
-        $this->expectException(\OxidEsales\PayPalModule\Core\Exception\PayPalException::class);
-
         $endpointUrl = 'url';
         $payPalCurl = new \OxidEsales\PayPalModule\Core\Curl();
         $payPalCurl->setUrlToCall($endpointUrl);
 
-        $this->assertEquals($endpointUrl, $payPalCurl->getUrlToCall());
+        $failed = false;
+        try {
+            $this->assertEquals($endpointUrl, $payPalCurl->getUrlToCall());
+        } catch (\OxidEsales\PayPalModule\Core\Exception\PayPalException $e) {
+            $failed = true;
+        }
+        $this->assertTrue($failed);
+
     }
 
     /**

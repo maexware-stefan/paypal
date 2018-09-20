@@ -107,8 +107,6 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
      */
     public function testCall_withMethodNotSuccessful_throwException()
     {
-        $this->expectException(\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException::class);
-
         $params = array();
         $params["testParam"] = "testValue";
 
@@ -123,7 +121,13 @@ class CallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $caller->setParameters($params);
 
         $caller->setCurl($this->prepareCurl($response, $curlParams, $url, $charset));
-        $this->assertEquals($response, $caller->call());
+        $failed = false;
+        try {
+            $this->assertEquals($response, $caller->call());
+        } catch (\OxidEsales\PayPalModule\Core\Exception\PayPalResponseException $e) {
+            $failed = true;
+        }
+        $this->assertTrue($failed);
     }
 
     /**
