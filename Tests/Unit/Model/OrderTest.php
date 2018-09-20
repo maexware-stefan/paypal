@@ -108,7 +108,7 @@ class OrderTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $this->getSession()->setVariable('sess_challenge', '_testOrderId');
 
-        /** @var \OxidEsales\Eshop\Application\Model\Basket|\PHPUnit_Framework_MockObject_MockObject $basket */
+        /** @var \OxidEsales\Eshop\Application\Model\Basket $basket */
         $basket = $this->getMock(\OxidEsales\Eshop\Application\Model\Basket::class, array('getPaymentId'));
         $basket->expects($this->any())->method('getPaymentId')->will($this->returnValue("anotherPayment"));
 

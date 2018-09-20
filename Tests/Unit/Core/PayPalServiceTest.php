@@ -447,7 +447,7 @@ class Unit_oePayPal_core_oePayPalServiceTest extends \OxidEsales\TestingLibrary\
     /**
      * Provide a mocked \OxidEsales\PayPalModule\Core\Config
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \OxidEsales\PayPalModule\Core\Config
      */
     protected function getPayPalConfigMock()
     {

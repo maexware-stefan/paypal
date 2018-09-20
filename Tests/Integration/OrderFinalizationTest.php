@@ -55,7 +55,7 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
         $paymentGateway = $this->getPaymentGateway($payPalReturnStatus);
 
-        /** @var \OxidEsales\PayPalModule\Model\Order|\PHPUnit_Framework_MockObject_MockObject $order */
+        /** @var \OxidEsales\PayPalModule\Model\Order $order */
         $order = $this->getMock(
             Order::class,
             array('_getGateway', '_sendOrderByEmail', 'validateOrder'));
@@ -83,7 +83,7 @@ class OrderFinalizationTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $result = oxNew(\OxidEsales\PayPalModule\Model\Response\ResponseDoExpressCheckoutPayment::class);
         $result->setData(array('PAYMENTINFO_0_PAYMENTSTATUS' => $payPalReturnStatus));
 
-        /** @var \OxidEsales\PayPalModule\Core\PayPalService|\PHPUnit_Framework_MockObject_MockObject $service */
+        /** @var \OxidEsales\PayPalModule\Core\PayPalService $service */
         $service = $this->getMock(\OxidEsales\PayPalModule\Core\PayPalService::class, array('doExpressCheckoutPayment'));
         $service->expects($this->any())->method('doExpressCheckoutPayment')->will($this->returnValue($result));
 

@@ -101,7 +101,7 @@ class OutOfStockValidatorTest extends \OxidEsales\TestingLibrary\UnitTestCase
      * @param $basketAmount
      * @param $stockAmount
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return Basket
      */
     protected function createBasket($productId, $basketAmount, $stockAmount)
     {

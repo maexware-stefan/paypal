@@ -114,7 +114,7 @@ class OrderRefundActionHandlerTest extends \OxidEsales\TestingLibrary\UnitTestCa
     }
 
     /**
-     * @return \OxidEsales\PayPalModule\Core\PayPalService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \OxidEsales\PayPalModule\Core\PayPalService
      */
     protected function getService()
     {

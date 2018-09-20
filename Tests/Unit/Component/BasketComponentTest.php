@@ -58,7 +58,7 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $currentItem = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutCurrentItem::class, array('getArticleAmount'));
         $currentItem->expects($this->any())->method('getArticleAmount')->will($this->returnValue($articleAmount));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
+        /** @var BasketComponent $cmpBasket */
         $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator', 'getCurrentArticle'));
         $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
         $cmpBasket->expects($this->any())->method('getCurrentArticle')->will($this->returnValue($currentItem));
@@ -80,7 +80,7 @@ class BasketComponentTest extends \OxidEsales\TestingLibrary\UnitTestCase
         $validator = $this->getMock(\OxidEsales\PayPalModule\Model\ArticleToExpressCheckoutValidator::class, array('isArticleValid'));
         $validator->expects($this->any())->method('isArticleValid')->will($this->returnValue(true));
 
-        /** @var BasketComponent|PHPUnit_Framework_MockObject_MockObject $cmpBasket */
+        /** @var BasketComponent $cmpBasket */
         $cmpBasket = $this->getMock(BasketComponent::class, array('getValidator'));
         $cmpBasket->expects($this->any())->method('getValidator')->will($this->returnValue($validator));
 

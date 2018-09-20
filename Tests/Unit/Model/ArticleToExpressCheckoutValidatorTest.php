@@ -162,7 +162,7 @@ class ArticleToExpressCheckoutValidatorTest extends \OxidEsales\TestingLibrary\U
      * @param $basketSelectionList
      * @param $basketPersistentParam
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \OxidEsales\Eshop\Application\Model\Basket
      */
     protected function createBasket($basketProductId, $basketSelectionList, $basketPersistentParam)
     {
