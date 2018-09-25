@@ -184,13 +184,26 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
     }
 
     /**
+     * Asserts that text is not present.
+     *
+     * @param string $text    text to search
+     * @param string $message fail message
+     * @return void
+     */
+    public function assertTextNotPresent($text, $message = '')
+    {
+        $this->addToAssertionCount(1);
+        parent::assertTextNotPresent($text, $message);
+    }
+
+    /**
      * Fix for showing stack trace with phpunit 3.6 and later
      *
      * @param \Throwable $exception
      *
      * @throws Throwable
      */
-    protected function onNotSuccessfulTest(Throwable $exception)
+    protected function onNotSuccessfulTest(\Throwable $exception)
     {
         try {
             self::$doStopMink = false;
