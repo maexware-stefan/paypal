@@ -46,8 +46,8 @@ class User extends User_parent
     {
         $db = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $query = "SELECT `oxid` FROM `oxuser` WHERE `oxusername` = " . $db->quote($userEmail) . " AND `oxpassword` != ''";
-        if (!$this->getConfig()->getConfigParam('blMallUsers')) {
-            $query .= " AND `oxshopid` = " . $db->quote($this->getConfig()->getShopId());
+        if (!\OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('blMallUsers')) {
+            $query .= " AND `oxshopid` = " . $db->quote(\OxidEsales\Eshop\Core\Registry::getConfig()->getShopId());
         }
         if ($userId = $db->getOne($query)) {
             return $userId;
@@ -220,7 +220,7 @@ class User extends User_parent
      */
     protected function checkRequiredFieldsPayPalUser($addressData)
     {
-        $reqFields = $this->getConfig()->getConfigParam('aMustFillFields');
+        $reqFields = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('aMustFillFields');
         $result = true;
 
         foreach ($reqFields as $field) {

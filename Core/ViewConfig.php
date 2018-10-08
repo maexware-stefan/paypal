@@ -104,7 +104,7 @@ class ViewConfig extends ViewConfig_parent
                 $user = $this->getUser();
                 $validator = $this->getPaymentValidator();
                 $validator->setUser($user);
-                $validator->setConfig($this->getConfig());
+                $validator->setConfig($this->getDeleteMeConfig());
                 $validator->setCheckCountry(false);
 
                 $this->expressCheckoutEnabled = $validator->isPaymentValid();
@@ -159,7 +159,7 @@ class ViewConfig extends ViewConfig_parent
                 $user = $this->getUser();
                 $validator = $this->getPaymentValidator();
                 $validator->setUser($user);
-                $validator->setConfig($this->getConfig());
+                $validator->setConfig($this->getDeleteMeConfig());
 
                 $this->standardCheckoutEnabled = $validator->isPaymentValid();
             }
