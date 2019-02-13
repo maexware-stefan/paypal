@@ -65,6 +65,7 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
         "Timeout waiting for 'Bestellen ohne Registrierung'",
         "Timeout waiting for 'cancel_return'",
         "Timeout waiting for '2 x Test product 1'",
+        "Timeout waiting for 'Thank you'",
         "Timeout waiting for",
         "Entschuldigung",
         "Leider ist ein Fehler aufgetreten"
@@ -113,6 +114,12 @@ abstract class BaseAcceptanceTestCase extends \OxidEsales\TestingLibrary\Accepta
             ['isTextPresent', 'Curl'],
             ['isTextPresent', 'error'],
             ['isTextPresent', '56']
+        ],
+        'technical_problems'                     => [
+            ['isTextPresent', 'not'],
+            ['isTextPresent', 'available'],
+            ['isTextPresent', 'technical'],
+            ['isTextPresent', 'problems']
         ]
     ];
 
