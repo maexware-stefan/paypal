@@ -946,6 +946,91 @@ class AcceptanceOldGuiTest extends BaseAcceptanceTestCase
     }
 
     /**
+     * testing PayPal ECS in detail page and ECS in mini basket
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testECS()
+    {
+        //Assign PayPal to standard shipping method.
+        $this->importSql(__DIR__ . '/testSql/assignPayPalToGermanyStandardShippingMethod.sql');
+
+        // Open shop and add product to the basket
+        $this->openShop();
+        $this->searchFor("1001");
+        $this->clickAndWait("//ul[@id='searchList']/li/form/div/a[2]/span");
+        $this->clickAndWait("id=toBasket");
+
+        // Open mini basket
+        $this->click("id=minibasketIcon");
+        $this->assertElementPresent("//div[@id='paypalExpressCheckoutDetailsBox']/div/a", "No express PayPal button in mini cart");
+        $this->assertElementPresent("id=paypalExpressCheckoutDetailsButton", "No express PayPal button in mini cart");
+        $this->assertElementPresent("displayCartInPayPal", "No express PayPal checkbox for displaying cart in PayPal in mini cart");
+        $this->assertTextPresent("Display cart in PayPal", "No express PayPal text about displaying cart in PayPal in mini cart");
+        $this->assertElementPresent("id=paypalExpressCheckoutMiniBasketImage", "No express PayPal image in mini cart");
+        $this->assertElementPresent("id=paypalHelpIconMiniBasket", "No express PayPal checkbox help button for displaying cart in PayPal in mini cart");
+
+        // Open ECS in details page
+        $this->clickAndWait("id=paypalExpressCheckoutDetailsButton");
+        $this->assertElementPresent("//div[@id='popupECS']/p", "No Express PayPal popup appears");
+        $this->assertElementPresent("id=actionNotAddToBasketAndGoToCheckout", "No button in PayPal popup");
+        $this->assertElementPresent("id=actionAddToBasketAndGoToCheckout", "No button in PayPal popup");
+        $this->assertElementPresent("link=open current cart", "No link open current cart in popup");
+        $this->assertElementPresent("//div[@id='popupECS']/div/div/button", "No cancel button in PayPal popup");
+
+        // Select add to basket and go to checkout
+        $this->selectPayPalExpressCheckout("id=actionAddToBasketAndGoToCheckout");
+
+        // Check what was communicated with PayPal
+        $assertRequest = [
+            'L_PAYMENTREQUEST_0_AMT0' => 81.00,
+            'PAYMENTREQUEST_0_AMT' => 162.00,
+            'L_PAYMENTREQUEST_0_QTY0' => 2,
+            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR'];
+        $assertResponse = ['ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        // Cancel order
+        $this->cancelPayPal();
+        // Go to checkout with PayPal  with same amount in basket
+        $this->clickAndWait("id=paypalExpressCheckoutDetailsButton");
+        $this->clickAndWait("id=actionNotAddToBasketAndGoToCheckout");
+        // Check what was communicated with PayPal
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        // Cancel order
+        $this->cancelPayPal();
+
+        // Go to home page and purchase via PayPal
+        $this->assertTextPresent("2 x Test product 1", "Item quantity doesn't mach ot didn't displayed");
+        $this->assertTextPresent("162,00 €", "Item price doesn't mach ot didn't displayed");
+        $this->assertElementPresent("id=paypalHelpIconMiniBasket");
+        $this->assertElementPresent("id=paypalExpressCheckoutMiniBasketBox");
+        $this->assertElementPresent("displayCartInPayPal");
+        $this->clickAndWait("id=paypalExpressCheckoutMiniBasketImage");
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        $this->payWithPayPal();
+
+        // Check what was communicated with PayPal
+        $assertRequest = ['METHOD' => 'GetExpressCheckoutDetails'];
+        $assertResponse = [
+            'L_PAYMENTREQUEST_0_NAME0' => 'Test product 1',
+            'PAYMENTREQUEST_0_CURRENCYCODE' => 'EUR',
+            'L_PAYMENTREQUEST_0_QTY0' => '2',
+            'ACK' => 'Success'];
+        $this->assertLogData($assertRequest, $assertResponse);
+
+        $this->assertElementPresent("link=Test product 1", "Purchased product name is not displayed in last order step");
+        $this->assertTextPresent("Item #: 1001", "Product number not displayed in last order step");
+        $this->assertEquals("162,00 €", $this->getText("basketGrandTotal"), "Grand total price changed  or didn't displayed");
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+    }
+
+    /**
      * Test helper
      */
     protected function assertCaseInsensitiveText($expected, $actual)

@@ -1043,6 +1043,37 @@ class AcceptanceNewGuiTest extends BaseAcceptanceTestCase
     }
 
     /**
+     * Testing ability to change country in standard PayPal.
+     * NOTE: this test originally asserted data on PayPal page.
+     * ($this->assertFalse($this->isElementPresent("id=changeAddressButton"), "In standard PayPal there should be not possibility to change address");)
+     *
+     * @group paypal_standalone
+     * @group paypal_external
+     */
+    public function testPayPalStandard()
+    {
+        // Login to shop and go standard PayPal
+        $this->openShop();
+        $this->switchLanguage("English");
+        $this->searchFor("1001");
+        $this->clickAndWait(self::SELECTOR_ADD_TO_BASKET);
+        $this->openBasket("English");
+        $this->loginInFrontend(self::LOGIN_USERNAME, self::LOGIN_USERPASS);
+        $this->clickNextStepInShopBasket();
+        $this->assertTextPresent("Germany", "Users country should be Germany");
+        $this->clickNextStepInShopBasket();
+        $this->assertElementPresent("//input[@value='oxidpaypal']");
+        $this->click("payment_oxidpaypal");
+        $this->clickNextStepInShopBasket();
+
+        $this->payWithPayPal();
+
+        $this->assertTextPresent("PayPal", "Payment method not displayed in last order step");
+        $this->clickAndWait("//button[text()='Order now']");
+        $this->assertTextPresent(self::THANK_YOU_PAGE_IDENTIFIER, "Order is not finished successful");
+    }
+
+    /**
      * Select the payment "PayPal" in the order process.
      */
     protected function selectPaymentPayPal()
